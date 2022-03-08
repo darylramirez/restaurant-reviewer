@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const morgan = require('morgan');
+//cors allows two different domains to interact
+const cors = require('cors');
+// const morgan = require('morgan');
 const db = require('./db');
 
 //an instance of express
@@ -9,6 +11,7 @@ const app = express();
 //create middleware using third party morgan that auto calls next and will log to the console the api call
 // app.use(morgan('dev'))
 
+app.use(cors())
 //built in middleware for express that allows us to access req.body, converts the json to standard javascript object
 app.use(express.json())
 
