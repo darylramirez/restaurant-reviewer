@@ -15,52 +15,89 @@ app.use(express.json())
 
 //get all rstaurants
 app.get('/api/v1/restaurants', async (req,res) => {
+    try{
     const results = await db.query("select * from restaurants")
     console.log(results);
-    res.status(200).json();
+    res.status(200).json({
+        status: 'success',
+        results: results.rowCount,
+        data: {
+            restaurants: results.rows
+        },
+    });
+} catch(e){
+    console.log(`Error in GET ALL RESTAURANTS ${e}`);
+    res.status(404)
+}
 })
 
 //get individual restaurant
-app.get('/api/v1/restaurants/:id', (req,res) => {
+app.get('/api/v1/restaurants/:id', async (req,res) => {
+    try{
     const id = req.params.id;
-    console.log(id)
+    //do not use back ticks/string interpolation in sql query 
+    //makes you vulnerable to sql interjections and attacks
+    //the $1 will be replaced with the variable you passed into arr argument
+    //you can also specify the column you wnt back instead of * which returns all columns
+    const result = await db.query("select * from restaurants where id = $1", [id])
+    console.log(result);
     res.status(200).json({
         status: 'success',
         data: {
-            restaurant: "taco bell"
+            restaurant: result.rows[0]
         }
     })
+} catch(e){
+    console.log(`Error in GET INDIV RESTAURANT, ${e}`)
+}
 })
 
 //add a restaurant
-app.post('/api/v1/restaurants', (req,res) => {
-    console.log(req.body)
+app.post('/api/v1/restaurants', async(req,res) => {
+    try{
+    //need to include the returning */column to get any data back from insert query
+    const result = await db.query("INSERT INTO restaurants (name, city, price_range) values($1, $2, $3) returning *", 
+    [req.body.name, req.body.city, req.body.price_range]);
     res.status(201).json({
         status: 'success',
         data: {
-            restaurant: "taco bell"
-        } 
+            restaurant: result.rows[0],
+        },
     })
+} catch(e){
+console.log(`Error in POST new restaurant ${e}`)
+}
 })
 
 //update individual restaurant
-app.put('/api/v1/restaurants/:id', (req,res) => {
+//To update in Postgres 'update restaurants
+app.put('/api/v1/restaurants/:id', async (req,res) => {
+    try{
     const id = req.params.id;
-    console.log(`Updating this restaurant:${id}`);
-    console.log(req.body);
+    const result = await db.query("UPDATE restaurants SET name = $1, city = $2, price_range = $3 where id = $4 returning *", 
+    [req.body.name, req.body.city, req.body.price_range, id])
     res.status(200).json({
         status: 'success',
         data: {
-            restaurant: "taco bell"
+            restaurant: result.rows[0]
         } 
     })
+} catch(e){
+console.log(`Error updating restaurant ${e}`)
+}
 })
 
 //delete individual restaurant
-app.delete('/api/v1/restaurants/:id', (req,res) => {
+app.delete('/api/v1/restaurants/:id', async (req,res) => {
+    try{
     const id = req.params.id;
-    console.log(`Deleting this restaurant:${id}`);
-    res.status(204).json();
+    const result = await db.query("DELETE FROM restaurants where id = $1", [id])
+    res.status(204).json({
+        status: 'success'
+    });
+    } catch(e){
+        console.log(`Error deleting restaurants ${e}`)
+    }
 })
 
 
