@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { RestaurantsContextProvider } from "./context/RestaurantsContext";
 import Home from "./routes/Home";
 import RestaurantDetail from "./routes/RestaurantDetail";
-import UpdateRestaurant from "./routes/UpdateRestaurant";
+import UpdateRestaurant from "./routes/UpdatePage";
 
 //wrap entire App.js in context provider to get access to the props you've passed down to the entire app
 
