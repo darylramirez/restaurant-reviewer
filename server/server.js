@@ -19,13 +19,13 @@ app.use(express.json())
 //get all rstaurants
 app.get('/api/v1/restaurants', async (req,res) => {
     try{
-    const results = await db.query("select * from restaurants")
-    console.log(results);
+    const ratingData = await db.query("select * from restaurants left join (select restaurant_id, COUNT(*),TRUNC(AVG(rating),1) as avg_rating from reviews group by restaurant_id) reviews on restaurants.id = reviews.restaurant_id")
+    console.log(ratingData);
     res.status(200).json({
         status: 'success',
-        results: results.rowCount,
+        results: ratingData.rowCount,
         data: {
-            restaurants: results.rows
+            restaurants: ratingData.rows
         },
     });
 } catch(e){

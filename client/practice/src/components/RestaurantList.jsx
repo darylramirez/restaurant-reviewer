@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import RestaurantFinder from '../apis/RestaurantFinder';
 import { RestaurantsContext } from '../context/RestaurantsContext';
 import Loading from './Loading';
+import StarRating from './StarRating';
 
 function RestaurantList(props) {
     const {restaurants, setRestaurants} = useContext(RestaurantsContext);
@@ -67,7 +68,7 @@ navigate(`/restaurants/${id}`);
       <td>{restaurant.name}</td>
       <td>{restaurant.city}</td>
       <td>{"$".repeat(restaurant.price_range)}</td>
-      <td>Reviews</td>
+      <td><StarRating rating={restaurant.avg_rating}/>({restaurant.count})</td>
       <td><button onClick={(e) => handleUpdate(e, restaurant.id)}className="btn btn-warning">Edit</button></td>
       <td><button onClick={(e) => handleDelete(e, restaurant.id)} className="btn btn-danger">Delete</button></td>
     </tr>
