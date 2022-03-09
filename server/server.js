@@ -42,12 +42,14 @@ app.get('/api/v1/restaurants/:id', async (req,res) => {
     //makes you vulnerable to sql interjections and attacks
     //the $1 will be replaced with the variable you passed into arr argument
     //you can also specify the column you wnt back instead of * which returns all columns
-    const result = await db.query("select * from restaurants where id = $1", [id])
+    const result = await db.query("select * from restaurants where id = $1", [id]);
+    const reviews = await db.query("select * from reviews where restaurant_id = $1", [id]);
     console.log(result);
     res.status(200).json({
         status: 'success',
         data: {
-            restaurant: result.rows[0]
+            restaurant: result.rows[0],
+            reviews: reviews.rows,
         }
     })
 } catch(e){

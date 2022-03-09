@@ -20,22 +20,30 @@ function RestaurantList(props) {
             fetchData();
     }, [setRestaurants])
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (e, id) => {
+        //since the handleSelect is placed on the entire row this e.stopPropagation will allow the delete and edit button to 
+        //go to the right place where the button indicates
+        e.stopPropagation();
 try{
     await RestaurantFinder.delete(`/${id}`);
     deleteRestaurant(id);
     console.log(`Restaurant at id ${id} deleted`)
-} catch(e){
-    console.log(`Deleting restaurant ${e}`)
+} catch(err){
+    console.log(`Deleting restaurant ${err}`)
 }
     }
 
-    const handleUpdate = async (id) => {
+    const handleUpdate = async (e, id) => {
+        e.stopPropagation();
 try{
 navigate(`/restaurants/${id}/update`)
-} catch(e){
-    console.log('Updating restaurant error: ', e)
+} catch(err){
+    console.log('Updating restaurant error: ', err)
 }
+    }
+
+    const handleSelect = (id) => {
+navigate(`/restaurants/${id}`);
     }
 
     return (
@@ -54,13 +62,14 @@ navigate(`/restaurants/${id}/update`)
   <tbody>
       {restaurants ? (restaurants.map(restaurant => {
           return(
-        <tr key={restaurant.id}>
+        <tr key={restaurant.id}
+        onClick={() => handleSelect(restaurant.id)}>
       <td>{restaurant.name}</td>
       <td>{restaurant.city}</td>
       <td>{"$".repeat(restaurant.price_range)}</td>
       <td>Reviews</td>
-      <td><button onClick={() => handleUpdate(restaurant.id)}className="btn btn-warning">Edit</button></td>
-      <td><button onClick={() => handleDelete(restaurant.id)} className="btn btn-danger">Delete</button></td>
+      <td><button onClick={(e) => handleUpdate(e, restaurant.id)}className="btn btn-warning">Edit</button></td>
+      <td><button onClick={(e) => handleDelete(e, restaurant.id)} className="btn btn-danger">Delete</button></td>
     </tr>
           )
       }

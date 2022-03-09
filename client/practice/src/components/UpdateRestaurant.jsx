@@ -27,7 +27,7 @@ fetchData();
 const handleSubmit = async (e) => {
     try{
 e.preventDefault();
-const updatedRestaurant = await RestaurantFinder.put(`/${id}`, {name, city, price_range: Number(priceRange)});
+await RestaurantFinder.put(`/${id}`, {name, city, price_range: Number(priceRange)});
 navigate('/')
     } catch(e){
         console.log(`Update restaurant error ${e}`)
