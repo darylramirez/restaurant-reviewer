@@ -132,7 +132,8 @@ console.log(`Error updating restaurant ${e}`)
 app.delete('/api/v1/restaurants/:id', async (req,res) => {
     try{
     const id = req.params.id;
-    const result = await db.query("DELETE FROM restaurants where id = $1", [id])
+    await db.query("DELETE FROM reviews where restaurant_id = $1", [id])
+    await db.query("DELETE FROM restaurants where id = $1", [id])
     res.status(204).json({
         status: 'success'
     });
