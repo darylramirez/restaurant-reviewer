@@ -57,6 +57,26 @@ app.get('/api/v1/restaurants/:id', async (req,res) => {
 }
 })
 
+app.get('/api/v1/restaurants/:id/avg', async (req,res) => {
+    try{
+    const id = req.params.id;
+    //do not use back ticks/string interpolation in sql query 
+    //makes you vulnerable to sql interjections and attacks
+    //the $1 will be replaced with the variable you passed into arr argument
+    //you can also specify the column you wnt back instead of * which returns all columns
+    const average = await db.query("select avg(rating) from reviews where restaurant_id = $1", [id]);
+    console.log(average);
+    res.status(200).json({
+        status: 'success',
+        data: {
+            average: average.rows[0]
+        }
+    })
+} catch(e){
+    console.log(`Error in GET INDIV RESTAURANT, ${e}`)
+}
+})
+
 //add a restaurant
 app.post('/api/v1/restaurants', async(req,res) => {
     try{
