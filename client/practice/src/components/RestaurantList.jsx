@@ -68,7 +68,7 @@ navigate(`/restaurants/${id}`);
       <td>{restaurant.name}</td>
       <td>{restaurant.city}</td>
       <td>{"$".repeat(restaurant.price_range)}</td>
-      <td><StarRating rating={restaurant.avg_rating}/>({restaurant.count || 0})</td>
+      <td><StarRating rating={restaurant.avg_rating}/><span className='ml-1'>({restaurant.count || 0})</span></td>
       <td><button onClick={(e) => handleUpdate(e, restaurant.id)}className="btn btn-warning">Edit</button></td>
       <td><button onClick={(e) => handleDelete(e, restaurant.id)} className="btn btn-danger">Delete</button></td>
     </tr>

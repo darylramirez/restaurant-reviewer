@@ -43,8 +43,12 @@ fetchData();
             {selectedRestaurant ?
             <>
              <h5 className="font-weight-light display-3 text-center">{selectedRestaurant?.restaurant?.name}</h5>
+             <div>
              <StarRating rating={average}/>
-             <h6>({selectedRestaurant?.reviews?.length})</h6>
+             <span className="ml-1">
+             ({selectedRestaurant?.reviews?.length})
+             </span>
+             </div>
             <div className="mt-3">
                 <Reviews reviews={selectedRestaurant?.reviews}/>
             </div> 
