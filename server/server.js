@@ -74,6 +74,22 @@ console.log(`Error in POST new restaurant ${e}`)
 }
 })
 
+app.post('/api/v1/restaurants/:id/addReview', async(req,res) => {
+    try{
+    const id = req.params.id
+    const result = await db.query("INSERT INTO reviews (name, rating, review, restaurant_id) values($1, $2, $3, $4) returning *", 
+    [req.body.name, req.body.rating, req.body.review, id]);
+    res.status(201).json({
+        status: 'success',
+        data: {
+            reviews: result.rows[0]
+        },
+    })
+} catch(e){
+console.log(`Error in POST new restaurant ${e}`)
+}
+})
+
 //update individual restaurant
 //To update in Postgres 'update restaurants
 app.put('/api/v1/restaurants/:id', async (req,res) => {
