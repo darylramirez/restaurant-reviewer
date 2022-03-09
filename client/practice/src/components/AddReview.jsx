@@ -13,7 +13,7 @@ function AddReview(props) {
     const handleSubmit = async (e) => {
 e.preventDefault();
 try{
-const response = await RestaurantFinder.post(`/${id}/addReview`, {
+await RestaurantFinder.post(`/${id}/addReview`, {
     name, review, rating
 });
 navigate('/');
